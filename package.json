@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.8",
+    "tailwindcss": "^3.2.2"
+  },
+  "scripts": {
+    "dev": "npx tailwindcss -i src/css/input.css -o ./src/css/style.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.0",
+    "agora-chat": "^1.0.7",
+    "agora-rtc-sdk-ng": "^4.14.2",
+    "daisyui": "^2.38.1"
+  }
+}
