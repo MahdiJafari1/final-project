@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@tailwindcss/container-queries": "^0.1.0",
+    "agora-access-token": "^2.0.4",
     "agora-chat": "^1.0.7",
     "agora-rtc-sdk-ng": "^4.14.2",
     "daisyui": "^2.38.1"
