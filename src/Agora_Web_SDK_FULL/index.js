@@ -1,9 +1,35 @@
+const {
+  RtcTokenBuilder,
+  RtmTokenBuilder,
+  RtcRole,
+  RtmRole,
+} = require("agora-access-token");
+
+const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
+const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
+const channelName = "meet";
+const uid = 0;
+const role = RtcRole.PUBLISHER;
+const expirationTimeInSeconds = 3600 * 24 * 7;
+const currentTimestamp = Math.floor(Date.now() / 1000);
+const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+// Build token with uid
+const tokenA = RtcTokenBuilder.buildTokenWithUid(
+  appId,
+  appCertificate,
+  channelName,
+  uid,
+  role,
+  privilegeExpiredTs
+);
+console.log("Token with integer number Uid: " + tokenA);
+
 // create Agora client
 var client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
 var localTracks = {
   videoTrack: null,
-  audioTrack: null
+  audioTrack: null,
 };
 var remoteUsers = {};
 // Agora client options
@@ -11,7 +37,8 @@ var options = {
   appid: "b6dea4178c9948bfbaa41ffbc62fd933",
   channel: "meet",
   uid: null,
-  token: "007eJxTYKhbsVtyduq7TZpy9142Tnp672WI9zs3sbCv5/7OtjqkIMSswJBklpKaaGJobpFsaWlikZSWlAjkpaUlJZsZpaVYGhuzLsxJbghkZNihFc/EyACBID4LQ25qagkDAwDxgyEM"
+  token:
+    "007eJxTYKhbsVtyduq7TZpy9142Tnp672WI9zs3sbCv5/7OtjqkIMSswJBklpKaaGJobpFsaWlikZSWlAjkpaUlJZsZpaVYGhuzLsxJbghkZNihFc/EyACBID4LQ25qagkDAwDxgyEM",
 };
 
 // the demo can auto join channel with params in url
@@ -26,7 +53,7 @@ $(() => {
     $("#channel").val(options.channel);
     $("#join-form").submit();
   }
-})
+});
 
 $("#join-form").submit(async function (e) {
   e.preventDefault();
@@ -36,10 +63,13 @@ $("#join-form").submit(async function (e) {
     options.token = $("#token").val();
     options.channel = $("#channel").val();
     await join();
-    if(options.token) {
+    if (options.token) {
       $("#success-alert-with-token").css("display", "block");
     } else {
-      $("#success-alert a").attr("href", `index.html?appid=${options.appid}&channel=${options.channel}&token=${options.token}`);
+      $("#success-alert a").attr(
+        "href",
+        `index.html?appid=${options.appid}&channel=${options.channel}&token=${options.token}`
+      );
       $("#success-alert").css("display", "block");
     }
   } catch (error) {
@@ -47,26 +77,26 @@ $("#join-form").submit(async function (e) {
   } finally {
     $("#leave").attr("disabled", false);
   }
-})
+});
 
 $("#leave").click(function (e) {
   leave();
-})
+});
 
 async function join() {
-
   // add event listener to play remote tracks when remote user publishs.
   client.on("user-published", handleUserPublished);
   client.on("user-unpublished", handleUserUnpublished);
 
   // join a channel and create local tracks, we can use Promise.all to run them concurrently
-  [ options.uid, localTracks.audioTrack, localTracks.videoTrack ] = await Promise.all([
-    // join the channel
-    client.join(options.appid, options.channel, options.token || null),
-    // create local tracks, using microphone and camera
-    AgoraRTC.createMicrophoneAudioTrack(),
-    AgoraRTC.createCameraVideoTrack()
-  ]);
+  [options.uid, localTracks.audioTrack, localTracks.videoTrack] =
+    await Promise.all([
+      // join the channel
+      client.join(options.appid, options.channel, options.token || null),
+      // create local tracks, using microphone and camera
+      AgoraRTC.createMicrophoneAudioTrack(),
+      AgoraRTC.createCameraVideoTrack(),
+    ]);
 
   // play local video track
   localTracks.videoTrack.play("local-player");
@@ -80,7 +110,7 @@ async function join() {
 async function leave() {
   for (trackName in localTracks) {
     var track = localTracks[trackName];
-    if(track) {
+    if (track) {
       track.stop();
       track.close();
       localTracks[trackName] = undefined;
@@ -105,7 +135,7 @@ async function subscribe(user, mediaType) {
   // subscribe to a remote user
   await client.subscribe(user, mediaType);
   console.log("subscribe success");
-  if (mediaType === 'video') {
+  if (mediaType === "video") {
     const player = $(`
       <div id="player-wrapper-${uid}">
         <p class="player-name">remoteUser(${uid})</p>
@@ -115,7 +145,7 @@ async function subscribe(user, mediaType) {
     $("#remote-playerlist").append(player);
     user.videoTrack.play(`player-${uid}`);
   }
-  if (mediaType === 'audio') {
+  if (mediaType === "audio") {
     user.audioTrack.play();
   }
 }
