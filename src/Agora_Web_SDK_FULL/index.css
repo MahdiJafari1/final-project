@@ -48,3 +48,6 @@ input {
     height: 240px;
   }
 }
+.display-none{
+  display: none;
+}
