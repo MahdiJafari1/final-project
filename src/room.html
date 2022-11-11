@@ -13,15 +13,21 @@
 <body class="container mx-auto">
 
     <section class="mx-auto h-screen">
-        <div class="container px-5 py-24 mx-auto">
+        <div class="container flex flex-col px-5 py-24 mx-auto">
             <div class="flex flex-wrap -m-4">
                 <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center">
                     <div class="indicator">
                         <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                            <p class="mr-2">Arash</p>
+                            <p class="mr-2">Hussein</p>
                         </span>
-                        <div class="w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <img class="rounded-box" src="/public/arash.jpg" />
+                        <div class="w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="video_container">
+                            <!-- <img class="rounded-box" src="/public/arash.jpg" /> -->
+                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-36 h-36 rounded-box" viewBox="0 0 24 24">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                              </svg>
+                            <!-- <video class="rounded-box" id="user-container-1">
+                            </video> -->
                         </div>
                     </div>
                 </div>
@@ -33,54 +39,62 @@
                         </div>
                     </div>
                 </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center">
+                    <div class="indicator">
+                        <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">Mahdi </span>
+                        <div class="w-64 rounded-box ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img class="rounded-box" src="/public/arash.jpg" />
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-        <section class="btm-nav mb-5">
-            <ul class="flex flex-row space-x-8">
-                <label class="swap swap-rotate">
-                    <input type="checkbox" />
-
-                    <span class="swap-off btn btn-square btn-outline fill-current">
-                        <span class="material-symbols-outlined">mic</span>
-                    </span>
-
-                    <span class="swap-on btn btn-square btn-outline bg-red-500 text-white fill-current">
-                        <span class="material-symbols-outlined">mic_off</span>
-                    </span>
-                </label>
-                <label class="swap swap-rotate">
-                    <input type="checkbox" />
-
-                    <span class="swap-off btn btn-square btn-outline fill-current">
-                        <span class="material-symbols-outlined">videocam</span>
-                    </span>
-
-                    <span class="swap-on btn btn-square btn-outline fill-current  bg-red-500 text-white">
-                        <span class="material-symbols-outlined">videocam_off</span>
-                    </span>
-                </label>
-                <label class="swap swap-rotate">
-                    <input type="checkbox" />
-
-                    <span class="swap-off btn btn-square btn-outline fill-current">
-                        <span class="material-symbols-outlined">present_to_all</span>
-                    </span>
-
-                    <span class="swap-on btn btn-square btn-outline fill-current  bg-red-500 text-white">
-                        <span class="material-symbols-outlined">cancel_presentation</span>
-                    </span>
-                </label>
-                <label>
-                    <a href="./thanks.html" class="btn btn-square bg-red-500 text-white btn-outline">
-                        <span class="material-symbols-outlined">call_end</span>
-                    </a>
-                </label>
-            </ul>
-        </section>
     </section>
+    <section class="btm-nav mb-5">
+        <ul class="flex flex-row space-x-8">
+            <label class="swap swap-rotate">
+                <input type="checkbox" />
 
+                <span class="swap-off btn btn-square btn-outline fill-current">
+                    <span class="material-symbols-outlined">mic</span>
+                </span>
+
+                <span class="swap-on btn btn-square btn-outline bg-red-500 text-white fill-current">
+                    <span class="material-symbols-outlined">mic_off</span>
+                </span>
+            </label>
+            <label class="swap swap-rotate">
+                <input type="checkbox" />
+
+                <span class="swap-off btn btn-square btn-outline fill-current">
+                    <span class="material-symbols-outlined">videocam</span>
+                </span>
+
+                <span class="swap-on btn btn-square btn-outline fill-current  bg-red-500 text-white">
+                    <span class="material-symbols-outlined">videocam_off</span>
+                </span>
+            </label>
+            <label class="swap swap-rotate">
+                <input type="checkbox" />
+
+                <span class="swap-off btn btn-square btn-outline fill-current">
+                    <span class="material-symbols-outlined">present_to_all</span>
+                </span>
+
+                <span class="swap-on btn btn-square btn-outline fill-current  bg-red-500 text-white">
+                    <span class="material-symbols-outlined">cancel_presentation</span>
+                </span>
+            </label>
+            <label>
+                <a href="./thanks.html" class="btn btn-square bg-red-500 text-white btn-outline">
+                    <span class="material-symbols-outlined">call_end</span>
+                </a>
+            </label>
+        </ul>
+    </section>
 </body>
 <script type="module" src="/src/js/main.js"></script>
+<script type="module" src="/src/js/AgoraRTC_N-4.14.2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
 
 </html>
