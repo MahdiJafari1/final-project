@@ -2,7 +2,7 @@ const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYIg8vXLfX0W/BJlJeSbi+8qY2ucKLrvX+1pg88Qd9gmfJrYrMCSZpaQmmhiaWyRbWppYJKUlJQJ5aWlJyWZGaSmWxsZ2YsXJDYGMDEIa6qyMDBAI4rMw5KamljAwAABNKh6M";
+  "007eJxTYPjfdlNOcc+novWcE4zyQw54RZW0ni1YPCEl46myzj3GEBMFhiSzlNREE0Nzi2RLSxOLpLSkRCAvLS0p2cwoLcXS2DifvTq5IZCRQfe1KxMjAwSC+CwMuampJQwMAEz/HwM=";
 let client;
 let uid = sessionStorage.getItem("uid");
 
@@ -82,7 +82,7 @@ let handleUserPublished = async (user, mediaType) => {
     player = `
         <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center" id="user-container-${user.uid}">
             <div class="indicator">
-                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost z-0">
                     <p class="mr-2">Hussein</p>
                 </span>
                 <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-base-200 text-base-content ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${user.uid}">
@@ -129,10 +129,8 @@ let toggleMic = async (e) => {
 
     if(localTracks[0].muted){
         await localTracks[0].setMuted(false)
-        button.classList.add('btn-active')
     }else{
         await localTracks[0].setMuted(true)
-        button.classList.remove('btn-active')
     }
 }
 
@@ -140,10 +138,8 @@ let toggleCamera = async (e) => {
     let button = e.currentTarget
     if(localTracks[1].muted){
         await localTracks[1].setMuted(false)
-        button.classList.add("btn-active")
     }else{
         await localTracks[1].setMuted(true)
-        button.classList.remove('btn-active')
     }
 }
 
