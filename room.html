@@ -14,19 +14,14 @@
 <body class="container mx-auto">
 
     <section class="mx-auto mb-16" id="stream_container">
-        <div class="flex flex-col items-center justify-center px-5 py-5 mx-auto">
-            <div class="indicator w-4/5">
-                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">Mahdi</span>
-                <div class="w-full h-full flex items-center justify-center rounded-box ring ring-primary ring-offset-base-100 ring-offset-2" id="stream__box">
-                    <!-- <img class="rounded-box aspect-video w-full" src="/public/mahdi.jpg" /> -->
-                </div>
-            </div>
+        <div class="flex flex-col items-center justify-center aspect-video h-full w-full hidden" id="stream__box">
+
         </div>
         <div class="container flex flex-col px-5 py-5 mx-auto">
-            <div class="flex flex-wrap"  id="streams__container">
-                <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center">
+            <div class="flex flex-wrap" id="streams__container">
+                <!-- <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center">
                     <div class="indicator">
-                        <span class="indicator-item indicator-bottom indicator-center badge badge-ghost z-0">
+                        <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
                             <p class="">Mahdi</p>
                         </span>
                         <div class="w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="video_container">
@@ -36,11 +31,31 @@
                             </svg>
                         </div>
                     </div>
+                </div> -->
+                <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container" id="user-container-${uid}">
+                    <div class="indicator">
+                        <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                            <p class="mr-2">Mahdi</p>
+                        </span>
+                        <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container" id="user-container-${uid}">
+                    <div class="indicator">
+                        <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                            <p class="mr-2">Hussein</p>
+                        </span>
+                        <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="btm-nav bg-base-300">
+    <section class="btm-nav bg-base-300 z-10">
         <ul class="flex flex-row space-x-16">
             <label class="swap swap-rotate">
                 <input type="checkbox" id="mic-btn" />
@@ -54,7 +69,7 @@
                 </span>
             </label>
             <label class="swap swap-rotate">
-                <input type="checkbox" id="camera-btn"/>
+                <input type="checkbox" id="camera-btn" />
 
                 <span class="swap-off btn btn-square btn-outline fill-current">
                     <span class="material-symbols-outlined">videocam</span>
@@ -83,10 +98,67 @@
         </ul>
     </section>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
 <script type="module" src="/src/js/AgoraRTC_N-4.14.2.js"></script>
-<script type="module" src="/src/js/roomRTC.js"></script>
 <script type="module" src="/src/js/room.js"></script>
-<script type="module" src="/src/js/main.js"></script>
+<script>
+    let displayFrame = document.getElementById("stream__box");
+    let videoFrames = document.getElementsByClassName("video__container");
+    let userIdInDisplayFrame = null;
+
+
+    let expandVideoFrame = (e) => {
+        displayFrame.classList.remove("hidden");
+
+        let child = displayFrame.children[0];
+
+        if (child) {
+            document.getElementById("streams__container").appendChild(child);
+            console.log("child: ", child);
+            child.classList.add("xl:w-1/4")
+            child.classList.add("md:w-1/2")
+            child.classList.remove("w-full")
+            child.classList.remove("h-full")
+
+            let indicator = child.getElementsByClassName("indicator")[0];
+            console.log("Indicator:", indicator);
+            indicator.classList.remove("w-full")
+            indicator.classList.remove("h-full")
+
+            let videoWrapper = child.getElementsByClassName("video_wrapper")[0]
+
+            videoWrapper.classList.add("w-64")
+            videoWrapper.classList.add("h-64")
+            videoWrapper.classList.remove("w-full")
+            videoWrapper.classList.remove("h-full")
+        }
+
+        displayFrame.appendChild(e.currentTarget);
+        userIdInDisplayFrame = e.currentTarget.id;
+        largeFrame = displayFrame.children[0]
+
+        largeFrame.classList.remove("xl:w-1/4")
+        largeFrame.classList.remove("md:w-1/2")
+        largeFrame.classList.add("w-full")
+        largeFrame.classList.add("h-full")
+
+        let indicator = displayFrame.getElementsByClassName("indicator")[0];
+
+        indicator.classList.add("w-full")
+        indicator.classList.add("h-full")
+
+        let videoWrapper = displayFrame.getElementsByClassName("video_wrapper")[0]
+
+        videoWrapper.classList.remove("w-64")
+        videoWrapper.classList.remove("h-64")
+        videoWrapper.classList.add("w-full")
+        videoWrapper.classList.add("h-full")
+    };
+
+    for (let i = 0; videoFrames.length > i; i++) {
+        videoFrames[i].addEventListener("click", expandVideoFrame);
+    }
+</script>
+<script type="module" src="/src/js/roomRTC.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
 
 </html>

@@ -1,8 +1,9 @@
+
 const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYPjfdlNOcc+novWcE4zyQw54RZW0ni1YPCEl46myzj3GEBMFhiSzlNREE0Nzi2RLSxOLpLSkRCAvLS0p2cwoLcXS2DifvTq5IZCRQfe1KxMjAwSC+CwMuampJQwMAEz/HwM=";
+  "007eJxTYJhSrdd7+GeE5rsbOr0T35z8wRRT33zgZqXf5/jZ9Q9bA7MUGJLMUlITTQzNLZItLU0sktKSEoG8tLSkZDOjtBRLY+O4TbXJDYGMDNaLhZgYGSAQxGdhyE1NLWFgAAAx3iIV";
 let client;
 let uid = sessionStorage.getItem("uid");
 
@@ -42,7 +43,7 @@ let joinRoomInit = async () => {
   await client.join(appId, channelName, token, uid);
   joinStream();
   client.on("user-published", handleUserPublished);
-  client.on('user-left', handleUserLeft)
+  client.on("user-left", handleUserLeft);
 };
 
 let joinStream = async () => {
@@ -67,6 +68,9 @@ let joinStream = async () => {
   document
     .getElementById("streams__container")
     .insertAdjacentHTML("beforeend", player);
+  document
+    .getElementById(`user-container-${uid}`)
+    .addEventListener("click", expandVideoFrame);
 
   localTracks[1].play(`user-${uid}`);
   await client.publish([localTracks[0], localTracks[1]]);
@@ -78,11 +82,12 @@ let handleUserPublished = async (user, mediaType) => {
   await client.subscribe(user, mediaType);
 
   let player = document.getElementById(`user-container-${user.uid}`);
+
   if (player === null) {
     player = `
         <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center" id="user-container-${user.uid}">
             <div class="indicator">
-                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost z-0">
+                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
                     <p class="mr-2">Hussein</p>
                 </span>
                 <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-base-200 text-base-content ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${user.uid}">
@@ -94,6 +99,9 @@ let handleUserPublished = async (user, mediaType) => {
     document
       .getElementById("streams__container")
       .insertAdjacentHTML("beforeend", player);
+      document
+      .getElementById(`user-container-${user.uid}`)
+      .addEventListener("click", expandVideoFrame);
   }
 
   if (mediaType === "video") {
@@ -106,96 +114,104 @@ let handleUserPublished = async (user, mediaType) => {
 };
 
 let handleUserLeft = async (user) => {
-    delete remoteUsers[user.uid]
-    let item = document.getElementById(`user-container-${user.uid}`)
-    if(item){
-        item.remove()
+  delete remoteUsers[user.uid];
+  let item = document.getElementById(`user-container-${user.uid}`);
+  if (item) {
+    item.remove();
+  }
+
+  if (userIdInDisplayFrame === `user-container-${user.uid}`) {
+    displayFrame.style.display = null;
+
+    let videoFrames = document.getElementsByClassName("video__container");
+
+    for (let i = 0; videoFrames.length > i; i++) {
+      videoFrames[i].style.height = "300px";
+      videoFrames[i].style.width = "300px";
     }
-
-    if(userIdInDisplayFrame === `user-container-${user.uid}`){
-        displayFrame.style.display = null
-
-        let videoFrames = document.getElementsByClassName('video__container')
-
-        for(let i = 0; videoFrames.length > i; i++){
-            videoFrames[i].style.height = '300px'
-            videoFrames[i].style.width = '300px'
-        }
-    }
-}
+  }
+};
 
 let toggleMic = async (e) => {
-    let button = e.currentTarget
+  let button = e.currentTarget;
 
-    if(localTracks[0].muted){
-        await localTracks[0].setMuted(false)
-    }else{
-        await localTracks[0].setMuted(true)
-    }
-}
+  if (localTracks[0].muted) {
+    await localTracks[0].setMuted(false);
+  } else {
+    await localTracks[0].setMuted(true);
+  }
+};
 
 let toggleCamera = async (e) => {
-    let button = e.currentTarget
-    if(localTracks[1].muted){
-        await localTracks[1].setMuted(false)
-    }else{
-        await localTracks[1].setMuted(true)
-    }
-}
-
+  let button = e.currentTarget;
+  if (localTracks[1].muted) {
+    await localTracks[1].setMuted(false);
+  } else {
+    await localTracks[1].setMuted(true);
+  }
+};
 
 let toggleScreen = async (e) => {
-    let screenButton = e.currentTarget
-    let cameraButton = document.getElementById('camera-btn')
+  let screenButton = e.currentTarget;
+  let cameraButton = document.getElementById("camera-btn");
 
-    if(!sharingScreen){
-        sharingScreen = true
+  if (!sharingScreen) {
+    sharingScreen = true;
 
-        screenButton.classList.add('active')
-        cameraButton.classList.remove('active')
-        cameraButton.style.display = 'none'
+    screenButton.classList.add("active");
+    cameraButton.classList.remove("active");
+    cameraButton.style.display = "none";
 
-        localScreenTracks = await AgoraRTC.createScreenVideoTrack()
+    localScreenTracks = await AgoraRTC.createScreenVideoTrack();
 
-        document.getElementById(`user-container-${uid}`).remove()
-        displayFrame.style.display = 'block'
+    document.getElementById(`user-container-${uid}`).remove();
+    displayFrame.style.display = "block";
 
-        let player = `<div class="video__container" id="user-container-${uid}">
-                <div class="video-player" id="user-${uid}"></div>
-            </div>`
+    let player = `
+    <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
+        <div class="indicator">
+            <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                <p class="mr-2">Hussein</p>
+            </span>
+            <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
 
-        displayFrame.insertAdjacentHTML('beforeend', player)
-        document.getElementById(`user-container-${uid}`).addEventListener('click', expandVideoFrame)
+            </div>
+        </div>
+    </div>
+    `;
 
-        userIdInDisplayFrame = `user-container-${uid}`
-        localScreenTracks.play(`user-${uid}`)
+    displayFrame.insertAdjacentHTML("beforeend", player);
+    document
+      .getElementById(`user-container-${uid}`)
+      .addEventListener("click", expandVideoFrame);
 
-        await client.unpublish([localTracks[1]])
-        await client.publish([localScreenTracks])
+    userIdInDisplayFrame = `user-container-${uid}`;
+    localScreenTracks.play(`user-${uid}`);
 
-        let videoFrames = document.getElementsByClassName('video__container')
-        for(let i = 0; videoFrames.length > i; i++){
-            if(videoFrames[i].id != userIdInDisplayFrame){
-              videoFrames[i].style.height = '100px'
-              videoFrames[i].style.width = '100px'
-            }
-          }
+    await client.unpublish([localTracks[1]]);
+    await client.publish([localScreenTracks]);
 
-
-    }else{
-        sharingScreen = false
-        cameraButton.style.display = 'block'
-        document.getElementById(`user-container-${uid}`).remove()
-        await client.unpublish([localScreenTracks])
-
-        switchToCamera()
+    let videoFrames = document.getElementsByClassName("video__container");
+    for (let i = 0; videoFrames.length > i; i++) {
+      if (videoFrames[i].id != userIdInDisplayFrame) {
+        videoFrames[i].style.height = "100px";
+        videoFrames[i].style.width = "100px";
+      }
     }
-}
+  } else {
+    sharingScreen = false;
+    cameraButton.style.display = "block";
+    document.getElementById(`user-container-${uid}`).remove();
+    await client.unpublish([localScreenTracks]);
 
+    switchToCamera();
+  }
+};
 
-document.getElementById('camera-btn').addEventListener('click', toggleCamera)
-document.getElementById('mic-btn').addEventListener('click', toggleMic)
-document.getElementById('screenshare-btn').addEventListener('click', toggleScreen)
-
+document.getElementById("camera-btn").addEventListener("click", toggleCamera);
+document.getElementById("mic-btn").addEventListener("click", toggleMic);
+document
+  .getElementById("screenshare-btn")
+  .addEventListener("click", toggleScreen);
 
 joinRoomInit();
