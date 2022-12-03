@@ -1337,6 +1337,12 @@ html {
   padding-bottom: 1rem;
 }
 
+.stat-title {
+  grid-column-start: 1;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
 .swap {
   position: relative;
   display: inline-grid;
@@ -3242,6 +3248,10 @@ html {
 
 .lowercase {
   text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .normal-case {
