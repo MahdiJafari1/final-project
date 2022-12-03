@@ -19,10 +19,10 @@ if (!roomId) {
   roomId = "main";
 }
 
-// let displayName = sessionStorage.getItem('display_name')
-// if(!displayName){
-//     window.location = 'lobby.html'
-// }
+let displayName = sessionStorage.getItem('display_name')
+if(!displayName){
+    window.location = 'lobby.html'
+}
 
 let localTracks = [];
 let remoteUsers = {};
@@ -42,17 +42,17 @@ let joinStream = async () => {
   localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
 
   let player = `
-            <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
-                <div class="indicator">
-                    <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                        <p class="mr-2">Hussein</p>
-                    </span>
-                    <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
+    <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
+        <div class="indicator">
+            <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                <p class="mr-2 truncate">${displayName}</p>
+            </span>
+            <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
 
-                    </div>
-                </div>
             </div>
-    `;
+        </div>
+    </div>
+  `;
 
   document
     .getElementById("streams__container")
@@ -74,16 +74,16 @@ let handleUserPublished = async (user, mediaType) => {
 
   if (player === null) {
     player = `
-        <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center" id="user-container-${user.uid}">
-            <div class="indicator">
-                <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                    <p class="mr-2">Hussein</p>
-                </span>
-                <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-base-200 text-base-content ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${user.uid}">
-                </div>
-            </div>
-        </div>
-`;
+      <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center" id="user-container-${user.uid}">
+          <div class="indicator">
+              <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                  <p class="mr-2 truncate">${user.displayName}</p>
+              </span>
+              <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-base-200 text-base-content ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${user.uid}">
+              </div>
+          </div>
+      </div>
+    `;
 
     document
       .getElementById("streams__container")
@@ -103,9 +103,18 @@ let handleUserPublished = async (user, mediaType) => {
 };
 
 let switchToCamera = async () => {
-  let player = `<div class="video__container" id="user-container-${uid}">
-                  <div class="video-player" id="user-${uid}"></div>
-               </div>`;
+  let player = `
+    <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
+        <div class="indicator">
+            <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                <p class="mr-2 truncate">${displayName}</p>
+            </span>
+            <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
+
+            </div>
+        </div>
+    </div>
+  `;
   displayFrame.insertAdjacentHTML("beforeend", player);
 
   await localTracks[0].setMuted(true);
@@ -164,7 +173,7 @@ let toggleScreen = async (e) => {
     <div class="h-full w-full p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
         <div class="indicator h-full w-full">
             <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                <p class="mr-2">Hussein</p>
+                <p class="mr-2 truncate">${displayName}</p>
             </span>
             <div class="video_wrapper w-full h-full rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
 
@@ -173,6 +182,8 @@ let toggleScreen = async (e) => {
     </div>
     `;
 
+    document.getElementById(`user-container-${uid}`).remove();
+    displayFrame.classList.remove("hidden");
     displayFrame.insertAdjacentHTML("beforeend", player);
 
     document
@@ -185,12 +196,10 @@ let toggleScreen = async (e) => {
     await client.unpublish([localTracks[1]]);
     await client.publish([localScreenTracks]);
   } else {
-    displayFrame.classList.remove("hidden");
     sharingScreen = false;
-    // cameraButton.style.display = "block";
-    // document.getElementById(`user-container-${uid}`).remove();
+    // displayFrame.classList.add("hidden");
+    await client.unpublish([localTracks[1]]);
     await client.unpublish([localScreenTracks]);
-    switchToCamera();
   }
 };
 
