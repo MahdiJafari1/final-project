@@ -2,7 +2,7 @@ const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYLgtbCL08/3T8y82zvFQvX96itq0Ru+PKodMJ3idDE4MMNNUYEgyS0lNNDE0t0i2tDSxSEpLSgTy0tKSks2M0lIsjY3XP2pNbghkZOircGBlZIBAEJ+FITc1tYSBAQDQzCEw";
+  "007eJxTYNgYOpObI6HhbWztF8HaDe9+m0oqZtduKql6eTVC3WTJ7JkKDElmKamJJobmFsmWliYWSWlJiUBeWlpSsplRWoqlsfEc9e7khkBGhkPWZ5kYGSAQxGdhyE1NLWFgAAByvSBT";
 let client;
 let uid = sessionStorage.getItem("uid");
 
@@ -160,7 +160,6 @@ let toggleScreen = async (e) => {
   if (!sharingScreen) {
     sharingScreen = true;
     localScreenTracks = await AgoraRTC.createScreenVideoTrack();
-    // document.getElementById(`user-container-${uid}`).remove();
     let player = `
     <div class="h-full w-full p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
         <div class="indicator h-full w-full">
@@ -175,11 +174,10 @@ let toggleScreen = async (e) => {
     `;
 
     displayFrame.insertAdjacentHTML("beforeend", player);
-    displayFrame.classList.remove("hidden");
 
     document
-      .getElementById(`user-container-${uid}`)
-      .addEventListener("click", expandVideoFrame);
+    .getElementById(`user-container-${uid}`)
+    .addEventListener("click", expandVideoFrame);
 
     userIdInDisplayFrame = `user-container-${uid}`;
     localScreenTracks.play(`user-${uid}`);
@@ -187,7 +185,7 @@ let toggleScreen = async (e) => {
     await client.unpublish([localTracks[1]]);
     await client.publish([localScreenTracks]);
   } else {
-    console.log("Disable sharing!");
+    displayFrame.classList.remove("hidden");
     sharingScreen = false;
     // cameraButton.style.display = "block";
     // document.getElementById(`user-container-${uid}`).remove();
