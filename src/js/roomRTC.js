@@ -2,7 +2,7 @@ const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYNgYOpObI6HhbWztF8HaDe9+m0oqZtduKql6eTVC3WTJ7JkKDElmKamJJobmFsmWliYWSWlJiUBeWlpSsplRWoqlsfEc9e7khkBGhkPWZ5kYGSAQxGdhyE1NLWFgAAByvSBT";
+  "007eJxTYFj03cXq9M4nO9ScF5hGfHj+bk1WVIhu1uuXHHZX06T3spgpMCSZpaQmmhiaWyRbWppYJKUlJQJ5aWlJyWZGaSmWxsZ7r/UkNwQyMti1fGVhZIBAEJ+FITc1tYSBAQDdDiGz";
 let client;
 let uid = sessionStorage.getItem("uid");
 
@@ -39,7 +39,11 @@ let joinRoomInit = async () => {
 };
 
 let joinStream = async () => {
-  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
+   localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {encoderConfig:{
+    width:{min:640, ideal:1920, max:1920},
+    height:{min:480, ideal:1080, max:1080}
+}})
+
 
   let player = `
     <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
