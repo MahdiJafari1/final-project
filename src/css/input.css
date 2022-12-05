@@ -11,13 +11,6 @@
 .video_wrapper > div {
     @apply rounded-box;
 }
-
-/* #stream__box .video_wrapper {
-    @apply h-full w-full;
-}
-#stream__box .video_wrapper > div {
-    @apply h-full w-full;
-} */
 [data-theme="dracula"] .btn, .input {
     @apply rounded-full;
 }

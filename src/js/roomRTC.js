@@ -2,7 +2,7 @@ const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYFj03cXq9M4nO9ScF5hGfHj+bk1WVIhu1uuXHHZX06T3spgpMCSZpaQmmhiaWyRbWppYJKUlJQJ5aWlJyWZGaSmWxsZ7r/UkNwQyMti1fGVhZIBAEJ+FITc1tYSBAQDdDiGz";
+  "007eJxTYJjT9a/vgsqrtbzrDu37v1VGs9t3dkVe7vYG9Sk77OsMDDMVGJLMUlITTQzNLZItLU0sktKSEoG8tLSkZDOjtBRLY+NnJn3JDYGMDHzvUxkYoRDEZ2HITU0tYWAAANI8IPc=";
 let client;
 let uid = sessionStorage.getItem("uid");
 
@@ -19,14 +19,13 @@ if (!roomId) {
   roomId = "main";
 }
 
-let displayName = sessionStorage.getItem('display_name')
-if(!displayName){
-    window.location = 'lobby.html'
+let displayName = sessionStorage.getItem("display_name");
+if (!displayName) {
+  window.location = "lobby.html";
 }
 
 let localTracks = [];
 let remoteUsers = {};
-
 let localScreenTracks;
 let sharingScreen = false;
 
@@ -39,11 +38,15 @@ let joinRoomInit = async () => {
 };
 
 let joinStream = async () => {
-   localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {encoderConfig:{
-    width:{min:640, ideal:1920, max:1920},
-    height:{min:480, ideal:1080, max:1080}
-}})
-
+  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
+    {},
+    {
+      encoderConfig: {
+        width: { min: 640, ideal: 1920, max: 1920 },
+        height: { min: 480, ideal: 1080, max: 1080 },
+      },
+    }
+  );
 
   let player = `
     <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
@@ -106,31 +109,6 @@ let handleUserPublished = async (user, mediaType) => {
   }
 };
 
-let switchToCamera = async () => {
-  let player = `
-    <div class="xl:w-1/4 md:w-1/2 p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
-        <div class="indicator">
-            <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                <p class="mr-2 truncate">${displayName}</p>
-            </span>
-            <div class="video_wrapper w-64 h-64 rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
-
-            </div>
-        </div>
-    </div>
-  `;
-  displayFrame.insertAdjacentHTML("beforeend", player);
-
-  await localTracks[0].setMuted(true);
-  await localTracks[1].setMuted(true);
-
-  document.getElementById("mic-btn").classList.remove("active");
-  document.getElementById("screen-btn").classList.remove("active");
-
-  localTracks[1].play(`user-${uid}`);
-  await client.publish([localTracks[1]]);
-};
-
 let handleUserLeft = async (user) => {
   delete remoteUsers[user.uid];
   let item = document.getElementById(`user-container-${user.uid}`);
@@ -151,8 +129,6 @@ let handleUserLeft = async (user) => {
 };
 
 let toggleMic = async (e) => {
-  let button = e.currentTarget;
-
   if (localTracks[0].muted) {
     await localTracks[0].setMuted(false);
   } else {
@@ -161,7 +137,6 @@ let toggleMic = async (e) => {
 };
 
 let toggleCamera = async (e) => {
-  let button = e.currentTarget;
   if (localTracks[1].muted) {
     await localTracks[1].setMuted(false);
   } else {
@@ -174,25 +149,25 @@ let toggleScreen = async (e) => {
     sharingScreen = true;
     localScreenTracks = await AgoraRTC.createScreenVideoTrack();
     let player = `
-    <div class="h-full w-full p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
-        <div class="indicator h-full w-full">
-            <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
-                <p class="mr-2 truncate">${displayName}</p>
-            </span>
-            <div class="video_wrapper w-full h-full rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
+      <div class="h-full w-full p-4 flex flex-col space-y-6 items-center video__container"  id="user-container-${uid}">
+          <div class="indicator h-full w-full">
+              <span class="indicator-item indicator-bottom indicator-center badge badge-ghost">
+                  <p class="mr-2 truncate">${displayName}</p>
+              </span>
+              <div class="video_wrapper w-full h-full rounded-box inline-flex items-center justify-center bg-gray-200 text-gray-400 ring ring-primary ring-offset-base-100 ring-offset-2" id="user-${uid}">
 
-            </div>
-        </div>
-    </div>
-    `;
+              </div>
+          </div>
+      </div>
+      `;
 
     document.getElementById(`user-container-${uid}`).remove();
     displayFrame.classList.remove("hidden");
     displayFrame.insertAdjacentHTML("beforeend", player);
 
     document
-    .getElementById(`user-container-${uid}`)
-    .addEventListener("click", expandVideoFrame);
+      .getElementById(`user-container-${uid}`)
+      .addEventListener("click", expandVideoFrame);
 
     userIdInDisplayFrame = `user-container-${uid}`;
     localScreenTracks.play(`user-${uid}`);

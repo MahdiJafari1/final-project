@@ -21,8 +21,6 @@ async function setupStream() {
         sampleRate: 44100,
       },
     });
-
-    setupVideoFeedback();
   } catch (err) {
     console.error(err);
   }
@@ -70,7 +68,7 @@ window.addEventListener("load", () => {
   stopButton = document.getElementById("stop-btn");
   downloadButton = document.getElementById("download-btn");
   recordedVideo = document.getElementById("recorded-video");
-  console.log("startButton: ", startButton);
+
   startButton.addEventListener("click", startRecording);
   stopButton.addEventListener("click", stopRecording);
 });

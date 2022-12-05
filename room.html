@@ -92,12 +92,6 @@
             </div>
         </section>
         <section class="md:w-1/4 w-full hidden md:flex flex-grow p-5 z-10 card bg-base-200 rounded-box h-screen">
-            <!-- message form -->
-            <form name="publish">
-                <input type="text" name="message">
-                <input type="submit" value="Send">
-            </form>
-
             <!-- div with messages -->
             <div id="messages"></div>
             <div class="chat chat-start">
@@ -218,26 +212,5 @@
 </script>
 <script type="module" src="/src/js/roomRTC.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
-<script>
-    let socket = new WebSocket("wss://127.0.0.1:5500/room.html?room=room1");
-
-    // send message from the form
-    document.forms.publish.onsubmit = function () {
-        // e.preventDefault();
-        let outgoingMessage = this.message.value;
-
-        socket.send(outgoingMessage);
-        return false;
-    };
-
-    // message received - show the message in div#messages
-    socket.onmessage = function (event) {
-        let message = event.data;
-
-        let messageElem = document.createElement('div');
-        messageElem.textContent = message;
-        document.getElementById('messages').prepend(messageElem);
-    }
-</script>
 
 </html>
