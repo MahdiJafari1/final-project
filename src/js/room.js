@@ -12,12 +12,6 @@ let expandVideoFrame = (e) => {
   displayFrame.classList.remove("hidden");
   displayFrame.appendChild(e.currentTarget);
   userIdInDisplayFrame = e.currentTarget.id;
-
-  for (let i = 0; videoFrames.length > i; i++) {
-    if (videoFrames[i].id != userIdInDisplayFrame) {
-      // videoFrames[i].classList.add("w-screen h-screen");
-    }
-  }
 };
 
 for (let i = 0; videoFrames.length > i; i++) {
