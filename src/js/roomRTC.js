@@ -2,7 +2,7 @@ const appId = "b6dea4178c9948bfbaa41ffbc62fd933";
 const appCertificate = "1978f578c57b4e82be65408ed1a8a268";
 const channelName = "meet";
 let token =
-  "007eJxTYJAs1XqkEXzNoOHjPkcTZY2CxA0Lk2UPXl5WFv7midvTC+sVGJLMUlITTQzNLZItLU0sktKSEoG8tLSkZDOjtBRLY+MFy/qSGwIZGV49W8/KyACBID4LQ25qagkDAwCigyIK";
+  "007eJxTYFh65+KC6WaiCeyp3jPF/H3mViTyKx9VyJJao8xj5i4pdU6BIcksJTXRxNDcItnS0sQiKS0pEchLS0tKNjNKS7E0NmY9Pym5IZCRIVqpkYERCkF8Fobc1NQSBgYAMhAbiA==";
 let client;
 let uid = sessionStorage.getItem("uid");
 
